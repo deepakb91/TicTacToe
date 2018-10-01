@@ -143,7 +143,13 @@ public class MainActivity extends AppCompatActivity {
         public void handleMessage(Message msg) {
             int what = msg.what;
             int pos = msg.arg1;
-            Button b = null;
+            Button b = getButtonAt(pos);
+            displayMessage(what, b);
+        }
+    };
+
+    private Button getButtonAt(int position) {
+        Button b = null;
             //determine the position in the board where the move has to be made.
             switch (pos) {
                 case 0:
@@ -174,59 +180,61 @@ public class MainActivity extends AppCompatActivity {
                     b = (Button) findViewById(R.id.button8);
                     break;
             }
-            switch (what) {
-                case 1:
-                    //Player-X has made its move, so "X" has to be marked in the corresponding position
-                    b.setText("X");
-                    b.setTextColor(Color.parseColor("Red"));
-                    b.setEnabled(false);
-                    isEndGame();
-                    // Display toast message if Player-X won the game
-                    if (!isContinue) {
-                        if (!isWin) {
-                            isWin = true;
-                            Toast.makeText(MainActivity.this, "Player-X wins", Toast.LENGTH_LONG).show();
-                        }
-                    }
-                    //Display game over toast message when the game ends.
-                    if (positions.size() == 9) {
-                        isContinue=false;
-                        Toast.makeText(MainActivity.this, "Game Over!!!", Toast.LENGTH_LONG).show();
-                    }
-                    //Notify Player-O to make its move.
-                    if (isContinue) {
-                        Message msg1 = new Message();
-                        s.sHandler.sendMessageDelayed(msg1, 1500);
-                    }
-                    break;
-                case 2:
-                    //Player-O has made its move, so "O" has to be marked in the corresponding position
-                    b.setText("O");
-                    b.setTextColor(Color.parseColor("Blue"));
-                    b.setEnabled(false);
-                    isEndGame();
-                    // Display toast message if Player-O won the game
-                    if (!isContinue) {
-                        if (!isWin) {
-                            isWin = true;
-                            Toast.makeText(MainActivity.this, "Player-O wins", Toast.LENGTH_LONG).show();
-                        }
-                    }
-                    //Display game over toast message when the game ends
-                    if (positions.size() == 9) {
-                        isContinue=false;
-                        Toast.makeText(MainActivity.this, "Game Over!!!", Toast.LENGTH_LONG).show();
-                    }
-                    //Notify Player-X to make its move
-                    if (isContinue) {
-                        Message msg1 = new Message();
-                        f.fHandler.sendMessageDelayed(msg1, 1500);
-                    }
-                    break;
-            }
-        }
-    };
+        return b;
+    }
 
+    private void displayMessage(int w, Button b) {
+        switch (what) {
+            case 1:
+                //Player-X has made its move, so "X" has to be marked in the corresponding position
+                b.setText("X");
+                b.setTextColor(Color.parseColor("Red"));
+                b.setEnabled(false);
+                isEndGame();
+                // Display toast message if Player-X won the game
+                if (!isContinue) {
+                    if (!isWin) {
+                        isWin = true;
+                        Toast.makeText(MainActivity.this, "Player-X wins", Toast.LENGTH_LONG).show();
+                    }
+                }
+                //Display game over toast message when the game ends.
+                if (positions.size() == 9) {
+                    isContinue=false;
+                    Toast.makeText(MainActivity.this, "Game Over!!!", Toast.LENGTH_LONG).show();
+                }
+                //Notify Player-O to make its move.
+                if (isContinue) {
+                    Message msg1 = new Message();
+                    s.sHandler.sendMessageDelayed(msg1, 1500);
+                }
+                break;
+            case 2:
+                //Player-O has made its move, so "O" has to be marked in the corresponding position
+                b.setText("O");
+                b.setTextColor(Color.parseColor("Blue"));
+                b.setEnabled(false);
+                isEndGame();
+                // Display toast message if Player-O won the game
+                if (!isContinue) {
+                    if (!isWin) {
+                        isWin = true;
+                        Toast.makeText(MainActivity.this, "Player-O wins", Toast.LENGTH_LONG).show();
+                    }
+                }
+                //Display game over toast message when the game ends
+                if (positions.size() == 9) {
+                    isContinue=false;
+                    Toast.makeText(MainActivity.this, "Game Over!!!", Toast.LENGTH_LONG).show();
+                }
+                //Notify Player-X to make its move
+                if (isContinue) {
+                    Message msg1 = new Message();
+                    f.fHandler.sendMessageDelayed(msg1, 1500);
+                }
+                break;
+        }
+    }
     public class FirstRunnable extends HandlerThread {
 
         Handler fHandler = new Handler() {
